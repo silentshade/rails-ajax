@@ -16,7 +16,7 @@ module RailsAjax
       if (RailsAjax.config.Enabled)
         lArgs = _normalize_args(*iArgs, &iBlock)
         if ((request.xhr?) and
-            (!lArgs.has_key?(:partial)) and
+            #(!lArgs.has_key?(:partial)) and
             (!lArgs.has_key?(:layout)))
           logger.debug "[RailsAjax] render: iArgs=#{iArgs.inspect} iBlock?#{iBlock != nil} flash=#{flash.inspect} | Normalized arguments: #{lArgs.inspect}"
 
@@ -39,10 +39,16 @@ module RailsAjax
             # Send JSON result
             # Use 'application/json'
             self.content_type = 'application/json'
+            if lArgs[:partial]
+              key = '#' + lArgs[:partial].gsub('_','-').split('/').last
+            else
+              key = RailsAjax::config.MainContainer
+            end
+
             self.response_body = get_json_response(
-              :css_to_refresh => {
-                RailsAjax::config.MainContainer => lMainPage
-              }
+                :css_to_refresh => {
+                    key => lMainPage
+                }
             ).to_json
           elsif (lArgs[:status] == nil)
             redirect_to lArgs[:location]
@@ -75,7 +81,7 @@ module RailsAjax
         # Use 'application/json'
         self.content_type = 'application/json'
         self.response_body = get_json_response(
-          :redirect_to => url_for(iOptions)
+            :redirect_to => url_for(iOptions)
         ).to_json
       else
         super(iOptions, iResponseStatus)

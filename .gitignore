@@ -6,3 +6,5 @@ test/dummy/tmp/
 test/dummy/.sass-cache
 nbproject
 Releases
+.DS_Store
+.idea/
