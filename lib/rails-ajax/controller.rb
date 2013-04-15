@@ -15,9 +15,9 @@ module RailsAjax
     def render(*iArgs, &iBlock)
       if (RailsAjax.config.Enabled)
         lArgs = _normalize_args(*iArgs, &iBlock)
-        if ((request.xhr?) and
+        if (request.xhr?) and
             #(!lArgs.has_key?(:partial)) and
-            (!lArgs.has_key?(:layout)))
+            (!lArgs.has_key?(:layout))
           logger.debug "[RailsAjax] render: iArgs=#{iArgs.inspect} iBlock?#{iBlock != nil} flash=#{flash.inspect} | Normalized arguments: #{lArgs.inspect}"
 
           # If we have a redirection, use redirect_to
